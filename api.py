@@ -21,20 +21,17 @@ def getFolders():
     #['Key'], "Size": query['Contents']['Size']}
 
 @app.get("/files/getFolderContent")
-def getFolderContent(q: Union[str, None]):
-    if (q == None):
-        return getFolders()
-    else:
-            content = folderContentQuery(q, None)
-            if content == 0:
-                return {"Error": "Invalid folder name"}
+def getFolderContent(q: str, continuationToken=None):
+    content = folderContentQuery(q, continuationToken)
+    if content == 0:
+        return {"Error": "Invalid folder name"}
 
-            return {"content": content}
+    return {"content": content}
         
 
 
 # returns the first 250 files and subdirectories within a given subdirectory.
-def folderContentQuery(folderName: str, continuationToken: Union[str, None]):
+def folderContentQuery(folderName: str, continuationToken=None):
     queryList = []
     coord = (len(folderName) - 1)
     if (folderName[coord:] != "/"):
@@ -63,8 +60,8 @@ def listFolders(numQuery=1000):
     queryList = []
     results = s3.list_objects_v2(Bucket=BucketName, MaxKeys=numQuery)
     for i in range(len(results['Contents'])):
-        coord = (len(results['Contents'][i]['Key']) - 1)
-        checkLetter = results['Contents'][i]['Key'][coord:]
+        coord = (len(results['Contents'][i - 1]['Key']) - 1)
+        checkLetter = results['Contents'][i- 1]['Key'][coord:]
         if (checkLetter == "/"):
             queryList.append(results['Contents'][i - 1])  
         else:
