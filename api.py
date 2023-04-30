@@ -4,8 +4,8 @@ from typing import Union
 from fastapi import FastAPI
 import urllib.parse
 import os
-endpoint_url = "https://s3.wasabisys.com" #change if needed
 
+endpoint_url = "https://s3.wasabisys.com" #change if needed
 s3 = boto3.client('s3', endpoint_url=endpoint_url, aws_access_key_id=os.environ["S3_ACCESS"], aws_secret_access_key=os.environ["S3_SECRET"])
 BucketName = "repov2"
 cdn_endpoint = "https://repo.cdn.trolling.solutions/" #change if needed
