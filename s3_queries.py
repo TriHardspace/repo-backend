@@ -34,36 +34,36 @@ class s3_queries:
     #    return queryList
     
 
-    def listFolders(self):
-        queryList = []
-        returnList = []
-        is_Truncated = True
-        continuationToken = ""
-        while (is_Truncated):
-            results = self.s3.list_objects_v2(Bucket=self.bucketName, MaxKeys=1000, ContinuationToken=continuationToken)
-            queryList.append(results)
-            isTruncated = results["IsTruncated"]
-            if (isTruncated == True):
-                continuationToken = results["NextContinuationToken"]
-                print("e")
-            else: 
-                break
-        for i in range(len(queryList['Contents'])):
-            coord = (len(queryList['Contents'][i - 1]['Key']) - 1)
-            checkLetter = queryList['Contents'][i- 1]['Key'][coord:]
-            print(queryList['Contents'][i- 1]['Key'])
-            if (checkLetter == "/"):
-                returnList.append(results['Contents'][i - 1]) 
-            else:
-                pass
-            for i in range(len(returnList)):
-                del queryList[i]["ETag"]
-                del queryList[i]["StorageClass"]
-                del queryList[i]["Size"]
-                queryList[i]["URL"] = urllib.parse.quote(self.cdnEndpoint + queryList[i]["Key"])
-        return queryList    
+    #def listFolders(self):
+    #    queryList = []
+    #    returnList = []
+    #    is_Truncated = True
+    #    continuationToken = ""
+    #    while (is_Truncated):
+    #        results = self.s3.list_objects_v2(Bucket=self.bucketName, MaxKeys=1000, ContinuationToken=continuationToken)
+    #        queryList.append(results)
+    #        isTruncated = results["IsTruncated"]
+    #        if (isTruncated == True):
+    #            continuationToken = results["NextContinuationToken"]
+    #            print("e")
+    #        else: 
+    #            break
+    #    for i in range(len(queryList['Contents'])):
+    #        coord = (len(queryList['Contents'][i - 1]['Key']) - 1)
+    #        checkLetter = queryList['Contents'][i- 1]['Key'][coord:]
+    #        print(queryList['Contents'][i- 1]['Key'])
+    #        if (checkLetter == "/"):
+    #            returnList.append(results['Contents'][i - 1]) 
+    #        else:
+    #            pass
+    #        for i in range(len(returnList)):
+    #            del queryList[i]["ETag"]
+    #            del queryList[i]["StorageClass"]
+    #            del queryList[i]["Size"]
+    #            queryList[i]["URL"] = urllib.parse.quote(self.cdnEndpoint + queryList[i]["Key"])
+    #    return queryList    
 
-        print(returnList)
+    #    print(returnList)
 
 
 
